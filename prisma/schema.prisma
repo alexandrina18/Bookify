@@ -1,0 +1,147 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id          String   @id @default(cuid())
+  memberId    String   @unique // e.g. "MBR001"
+  name        String
+  email       String   @unique
+  phone       String?
+  gender      String?
+  address     String?
+  password    String
+  role        String   @default("member") // "member" | "admin"
+  status      String   @default("active") // "active" | "blocked"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  borrowings    Borrowing[]
+  attendances   Attendance[]
+  fines         Fine[]
+  extensions    Extension[]
+  complaints    Complaint[]
+}
+
+model Publisher {
+  id        String   @id @default(cuid())
+  name      String
+  location  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  books Book[]
+}
+
+model Book {
+  id          String   @id @default(cuid())
+  bookId      String   @unique // barcode ID e.g. "BK001"
+  title       String
+  author      String
+  year        Int?
+  pages       Int?
+  genre       String?
+  stock       Int      @default(1)
+  available   Int      @default(1)
+  coverUrl    String?
+  publisherId String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  publisher   Publisher?  @relation(fields: [publisherId], references: [id])
+  borrowings  Borrowing[]
+  complaints  Complaint[]
+}
+
+model Borrowing {
+  id           String    @id @default(cuid())
+  userId       String
+  bookId       String
+  borrowedAt   DateTime  @default(now())
+  dueDate      DateTime
+  returnedAt   DateTime?
+  status       String    @default("active") // "active" | "returned" | "overdue" | "lost"
+  renewCount   Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  user       User  @relation(fields: [userId], references: [id])
+  book       Book  @relation(fields: [bookId], references: [id])
+  fine       Fine?
+  extensions Extension[]
+}
+
+model Attendance {
+  id         String    @id @default(cuid())
+  userId     String
+  checkIn    DateTime  @default(now())
+  checkOut   DateTime?
+  duration   Int?      // in minutes
+  createdAt  DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Fine {
+  id          String   @id @default(cuid())
+  userId      String
+  borrowingId String   @unique
+  daysLate    Int
+  amount      Int      // in Rupiah
+  bookPrice   Int?
+  status      String   @default("unpaid") // "unpaid" | "paid" | "loss"
+  type        String   @default("late") // "late" | "lost" | "damaged"
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user      User      @relation(fields: [userId], references: [id])
+  borrowing Borrowing @relation(fields: [borrowingId], references: [id])
+}
+
+model Extension {
+  id          String   @id @default(cuid())
+  userId      String
+  borrowingId String
+  requestedAt DateTime @default(now())
+  newDueDate  DateTime?
+  status      String   @default("pending") // "pending" | "approved" | "rejected"
+  adminNote   String?
+  reviewedAt  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user      User      @relation(fields: [userId], references: [id])
+  borrowing Borrowing @relation(fields: [borrowingId], references: [id])
+}
+
+model Complaint {
+  id          String   @id @default(cuid())
+  userId      String
+  bookId      String
+  type        String   // "lost" | "damaged"
+  description String?
+  status      String   @default("pending") // "pending" | "resolved" | "closed"
+  adminNote   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+  book Book @relation(fields: [bookId], references: [id])
+}
+
+model Budget {
+  id          String   @id @default(cuid())
+  category    String   // "salary" | "infrastructure" | "equipment" | "books" | "operations" | "loss" | "other"
+  description String
+  amount      Int
+  type        String   // "expense" | "income"
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
