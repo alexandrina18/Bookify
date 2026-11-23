@@ -324,3 +324,4 @@ body:has(.admin-main) .admin-id-search:not(:has(input[name="book_id"])){
 }
 
 .brand-logo,.member-brand-logo{object-fit:contain;background:transparent!important;padding:1px}
+body:has(.admin-main) .sidebar .brand-logo{width:42px;height:42px;padding:4px;background:#f7f0e4!important;border:2px solid #c8a46d;border-radius:12px;box-shadow:0 0 0 3px #57402f,0 4px 10px #120b0755}
