@@ -1,0 +1,19 @@
+<?php
+require_once __DIR__ . '/../includes/layout.php'; require_admin();
+if ($_SERVER['REQUEST_METHOD']==='POST') {
+  $member=one('SELECT * FROM users WHERE member_id=? AND role="member"',[trim($_POST['member_id']??'')]); $book=one('SELECT * FROM books WHERE book_id=?',[trim($_POST['book_id']??'')]);
+  if(!$member) flash('Anggota tidak ditemukan.','error'); elseif($member['status']==='blocked') flash('Akun anggota diblokir.','error'); elseif(!$book) flash('Buku tidak ditemukan.','error'); elseif((int)$book['available']<1) flash('Buku tidak tersedia.','error'); elseif(count_of('fines','user_id=? AND status="unpaid"',[$member['id']])) flash('Anggota masih memiliki denda belum lunas.','error'); elseif(count_of('borrowings','user_id=? AND status IN ("active","overdue")',[$member['id']])>=3) flash('Batas peminjaman maksimal 3 buku.','error'); else { execute('INSERT INTO borrowings (user_id,book_id,due_date,status) VALUES (?,?,?,"active")',[$member['id'],$book['id'],date('Y-m-d H:i:s',strtotime('+7 days'))]); execute('UPDATE books SET available=available-1 WHERE id=?',[$book['id']]); flash('Peminjaman berhasil dicatat.'); }
+  redirect('admin/borrowing.php');
+}
+$memberId=trim($_GET['member_id']??''); $bookId=trim($_GET['book_id']??'');
+$query='SELECT br.*,u.name,u.member_id,b.title,b.book_id FROM borrowings br JOIN users u ON u.id=br.user_id JOIN books b ON b.id=br.book_id'; $where=[]; $params=[];
+if($memberId!==''){ $where[]='u.member_id LIKE ?'; $params[]='%'.$memberId.'%'; } if($bookId!==''){ $where[]='b.book_id LIKE ?'; $params[]='%'.$bookId.'%'; }
+if($where) $query.=' WHERE '.implode(' AND ',$where); $data=rows($query.' ORDER BY br.borrowed_at DESC',$params);
+foreach($data as $row) if($row['status']==='active' && strtotime($row['due_date'])<time()) execute('UPDATE borrowings SET status="overdue" WHERE id=?',[$row['id']]);
+$members=rows('SELECT member_id,name FROM users WHERE role="member" AND status="active" ORDER BY name');
+$books=rows('SELECT book_id,title,available FROM books WHERE available>0 ORDER BY title');
+page_head('Peminjaman',true); admin_heading('Peminjaman','Catat peminjaman melalui ID anggota dan ID buku');
+?>
+<section class="modal"><form method="post"><div class="form-grid"><div class="form-row"><label>Anggota</label><select name="member_id" required><option value="">Pilih anggota</option><?php foreach($members as $memberOption): ?><option value="<?= e($memberOption['member_id']) ?>"><?= e($memberOption['member_id'].' · '.$memberOption['name']) ?></option><?php endforeach; ?></select></div><div class="form-row"><label>Buku yang tersedia</label><select name="book_id" required><option value="">Pilih buku</option><?php foreach($books as $bookOption): ?><option value="<?= e($bookOption['book_id']) ?>"><?= e($bookOption['book_id'].' · '.$bookOption['title'].' ('.$bookOption['available'].' tersedia)') ?></option><?php endforeach; ?></select></div></div><button>Proses Peminjaman</button></form></section>
+<form class="card admin-id-search" method="get"><input name="member_id" value="<?= e($memberId) ?>" placeholder="Filter ID anggota"><input name="book_id" value="<?= e($bookId) ?>" placeholder="Filter ID buku"><button type="submit">Terapkan filter</button><a class="button secondary" href="<?= e(url('admin/borrowing.php')) ?>">Reset</a></form>
+<section class="card table-card"><table><thead><tr><th>Anggota</th><th>Buku</th><th>Pinjam</th><th>Jatuh Tempo</th><th>Status</th></tr></thead><tbody><?php foreach($data as $row): ?><tr><td><?= e($row['name']) ?><br><small class="muted"><?=e($row['member_id'])?></small></td><td><?=e($row['title'])?><br><small class="muted"><?=e($row['book_id'])?></small></td><td><?=date_id($row['borrowed_at'])?></td><td><?=date_id($row['due_date'])?></td><td><?=status_badge($row['status'])?></td></tr><?php endforeach; ?></tbody></table></section><?php page_foot(true); ?>

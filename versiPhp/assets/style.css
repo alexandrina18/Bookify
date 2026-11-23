@@ -53,3 +53,274 @@ input,select,textarea{border:1px solid #dce3ed;border-radius:8px;background:#fff
 body:has(.member-app){background:#e9eef5;color:#10213f}
 @media(max-width:900px){.sidebar{box-shadow:none}}
 
+
+/* Admin workspace: dark navy palette */
+body:has(.admin-main){background:#071426;color:#e7eef9}
+body:has(.admin-main) .sidebar{background:#0b1d35;border-color:#183451;box-shadow:5px 0 24px #02081755;color:#dce8f8}
+body:has(.admin-main) .sidebar .brand{color:#f1f6ff}
+body:has(.admin-main) .sidebar .brand span{color:#60a5fa;-webkit-text-fill-color:#60a5fa}
+body:has(.admin-main) .sidebar>small{color:#7fa3ca}
+body:has(.admin-main) .sidebar nav a{color:#a6b8ce;transition:background .18s ease,color .18s ease}
+body:has(.admin-main) .sidebar nav a:hover,body:has(.admin-main) .sidebar nav .active{background:#12365c;color:#8fc5ff}
+body:has(.admin-main) .sidebar-user{border-color:#183451;color:#8fa4bd}
+body:has(.admin-main) .sidebar-user strong{color:#e8f1fc}
+body:has(.admin-main) .sidebar-user a{color:#f28c9a}
+body:has(.admin-main) .admin-main{background:#0c1b30;color:#dce7f5}
+body:has(.admin-main) .page-heading h1{color:#f1f6ff}
+body:has(.admin-main) .page-heading p,body:has(.admin-main) .muted{color:#91a5bd}
+body:has(.admin-main) .stat,body:has(.admin-main) .card,body:has(.admin-main) .modal{background:#10243d;border-color:#1c3a5b;color:#e5edf8;box-shadow:0 8px 24px #02081730}
+body:has(.admin-main) .stat strong{color:#70adff}
+body:has(.admin-main) .table-card h2{color:#eef5ff}
+body:has(.admin-main) table{color:#dce7f5}
+body:has(.admin-main) th{background:#142c49;color:#9db5d0}
+body:has(.admin-main) th,body:has(.admin-main) td{border-color:#203b59}
+body:has(.admin-main) tr:hover td{background:#17314e}
+body:has(.admin-main) input,body:has(.admin-main) select,body:has(.admin-main) textarea{background:#0a192c;border-color:#294665;color:#e7eef9}
+body:has(.admin-main) input::placeholder,body:has(.admin-main) textarea::placeholder{color:#7188a3}
+body:has(.admin-main) label{color:#a8bad0}
+body:has(.admin-main) .modal summary{color:#80baff}
+body:has(.admin-main) .chart{background:#0d2038;border-radius:10px}
+body:has(.admin-main) .chart .bar{background:linear-gradient(#60a5fa,#2563eb)}
+body:has(.admin-main) .chart .bar span{color:#9aafc9}
+body:has(.admin-main) .badge-active,body:has(.admin-main) .badge-paid,body:has(.admin-main) .badge-approved,body:has(.admin-main) .badge-returned,body:has(.admin-main) .badge-resolved{color:#80e1b8;background:#0c463b}
+body:has(.admin-main) .badge-overdue,body:has(.admin-main) .badge-blocked,body:has(.admin-main) .badge-unpaid,body:has(.admin-main) .badge-rejected{color:#ffabb3;background:#512633}
+body:has(.admin-main) .badge-pending{color:#f5d47a;background:#493a19}
+body:has(.admin-main) .notice{border-color:#31577c;background:#142f4c;color:#c2ddf8}
+body:has(.admin-main) .button.secondary{background:#10243d;border-color:#294665;color:#d6e4f5}
+@media(max-width:900px){body:has(.admin-main) .sidebar{background:#0b1d35;border-bottom:1px solid #183451}}
+
+
+/* Bookify logo asset */
+.brand{display:inline-flex;align-items:center;gap:9px}
+.brand-logo{display:block;flex:none;width:38px;height:38px;object-fit:cover;border-radius:9px;background:#f1f4f8}
+.login-brand{justify-content:center;margin:0 auto 14px}
+.login-brand .brand-logo{width:56px;height:56px;border-radius:14px}
+.member-brand-logo{display:block;flex:none;width:32px;height:32px;object-fit:cover;border-radius:8px}
+
+
+/* Warm bookish theme for member dashboard */
+body:has(.member-app){background:#e8dfd1;color:#37281f;font-family:Georgia,"Times New Roman",serif}
+.member-app{background:#faf7f0;border-color:#f4eee3;box-shadow:0 18px 55px #503c281c}
+.member-sidebar{background:#f3ede2;border-color:#e5d9c8}
+.member-brand{color:#39291f}
+.member-brand-logo{border:1px solid #dfd1bc;background:#fbf7ef}
+.member-menu a,.member-menu-bottom a{color:#756455}
+.member-menu a.selected{background:#6d4931;color:#fff;box-shadow:0 5px 14px #593b2826}
+.member-menu a i{background:#e6dac9;color:#624832}
+.member-menu-bottom,.member-profile{border-color:#e2d6c5}
+.member-profile b{color:#38291f}.member-profile small,.profile-more{color:#887561}
+.profile-avatar{background:#e4d4bd;color:#65452d}
+.member-content{background:#f7f3eb}
+.member-topbar{background:#fffdf8;border-color:#e9dfd0}
+.member-search{background:#f1eade;color:#8e7962}
+.member-search input{background:transparent;color:#453428}
+.member-search input::placeholder{color:#9a8874}
+.member-greeting{color:#493729}
+.member-section{background:#fffdf8;border-color:#ebe1d3;border-radius:13px;box-shadow:0 4px 15px #513b2410}
+.member-section-heading h1,.member-section-heading h2{color:#3b2a20}
+.member-kicker{color:#a18b70}
+.member-see-all{background:#f2e7d7;color:#68472e}
+.category-count,.loan-total{color:#927e68}
+.member-book-card{background:#fffdf8;border-color:#eee4d8;box-shadow:0 5px 13px #49352210}
+.member-cover{background:#e9dfd0}
+.cover-mark{background:linear-gradient(150deg,#c6a879,#76563c 68%,#403126);box-shadow:0 9px 18px #39271838}
+.cover-2 .cover-mark{background:linear-gradient(150deg,#d6b24f,#9b6e26);color:#33251b}
+.cover-3 .cover-mark{background:linear-gradient(150deg,#f1e8d8,#b6a38d);color:#443326}
+.cover-4 .cover-mark{background:linear-gradient(150deg,#593d2b,#bd9666)}
+.cover-5 .cover-mark{background:linear-gradient(150deg,#4e4934,#1c211d)}
+.cover-6 .cover-mark{background:linear-gradient(150deg,#ded5c6,#8c7c69);color:#33271e}
+.cover-7 .cover-mark{background:linear-gradient(150deg,#7c3730,#c49c7c)}
+.cover-8 .cover-mark{background:linear-gradient(150deg,#36434b,#bdc1b6)}
+.member-book-info h3{color:#3d2c21}.member-book-info p{color:#8e7d6b}
+.in-stock{color:#55734f}.out-stock{color:#a54d3f}
+.member-category-list a{background:#f0e8dc;color:#66523f}
+.member-category-list a.active{background:#6d4931;color:#fff}
+.member-loans table{background:#fffdf8}.member-loans th{background:#f2eadf;color:#806d59}
+.member-loans th,.member-loans td{border-color:#ebe1d4}.member-loans td{color:#665541}
+.member-loans td b{color:#3f2f23}.member-loans .muted{color:#95836f}
+.renew-button{background:#efe2ce;color:#68472e}
+.member-empty{color:#927e69}
+.member-feature-panel{background:#473326;color:#fbf5e9}
+.feature-label{color:#d7bd94}.feature-genre{color:#d7bd94}
+.feature-author,.feature-stats span,.feature-description{color:#ded0bd}
+.feature-stats span+span{border-color:#ffffff30}
+.feature-button{background:#b98a4e;color:#fffaf0}.feature-button:hover{background:#a3753d}
+.feature-cover{border-color:#ffffff25}
+@media(max-width:720px){.member-sidebar{background:#f3ede2;border-color:#e5d9c8}}
+/* Dark warm cocoa palette for admin */
+body:has(.admin-main){background:#17120f;color:#eee3d3}
+body:has(.admin-main) .sidebar{background:#211813;border-color:#3a2a20;color:#eee3d3}
+body:has(.admin-main) .sidebar .brand{color:#f8efe2}
+body:has(.admin-main) .sidebar .brand span{color:#d7ad76;-webkit-text-fill-color:#d7ad76}
+body:has(.admin-main) .brand-logo{background:#f6eee2}
+body:has(.admin-main) .sidebar>small{color:#b9905e}
+body:has(.admin-main) .sidebar nav a{color:#c0ad97}
+body:has(.admin-main) .sidebar nav a:hover,body:has(.admin-main) .sidebar nav .active{background:#493426;color:#f0c98e}
+body:has(.admin-main) .sidebar-user{border-color:#3a2a20;color:#aa9782}
+body:has(.admin-main) .sidebar-user strong{color:#f0e5d6}
+body:has(.admin-main) .sidebar-user a{color:#e39b83}
+body:has(.admin-main) .admin-main{background:#191310;color:#eee3d3}
+body:has(.admin-main) .page-heading h1{color:#fbf0df}
+body:has(.admin-main) .page-heading p,body:has(.admin-main) .muted{color:#b1a08d}
+body:has(.admin-main) .stat,body:has(.admin-main) .card,body:has(.admin-main) .modal{background:#261b15;border-color:#493427;color:#efe4d4;box-shadow:0 8px 24px #0b070530}
+body:has(.admin-main) .stat strong{color:#dfb375}
+body:has(.admin-main) .table-card h2{color:#f4e8d7}
+body:has(.admin-main) table{color:#eadfce}
+body:has(.admin-main) th{background:#34251c;color:#cfb89b}
+body:has(.admin-main) th,body:has(.admin-main) td{border-color:#493529}
+body:has(.admin-main) tr:hover td{background:#34251c}
+body:has(.admin-main) input,body:has(.admin-main) select,body:has(.admin-main) textarea{background:#1c1511;border-color:#5a4130;color:#f1e6d7}
+body:has(.admin-main) input::placeholder,body:has(.admin-main) textarea::placeholder{color:#a18b73}
+body:has(.admin-main) label{color:#cfbda7}
+body:has(.admin-main) .modal summary{color:#dfb375}
+body:has(.admin-main) .chart{background:#1e1713;border-radius:10px}
+body:has(.admin-main) .chart .bar{background:linear-gradient(#d9b276,#8a5a35)}
+body:has(.admin-main) .chart .bar span{color:#c2ad94}
+body:has(.admin-main) .badge-active,body:has(.admin-main) .badge-paid,body:has(.admin-main) .badge-approved,body:has(.admin-main) .badge-returned,body:has(.admin-main) .badge-resolved{color:#9ed3ac;background:#243b2b}
+body:has(.admin-main) .badge-overdue,body:has(.admin-main) .badge-blocked,body:has(.admin-main) .badge-unpaid,body:has(.admin-main) .badge-rejected{color:#f0aaa0;background:#4a2824}
+body:has(.admin-main) .badge-pending{color:#efcf8b;background:#4a3920}
+body:has(.admin-main) .notice{border-color:#63452f;background:#37261b;color:#ecd1a8}
+body:has(.admin-main) button,body:has(.admin-main) .button{background:#9b6b3e;color:#fff8ed;box-shadow:0 4px 10px #08050330}
+body:has(.admin-main) button:hover,body:has(.admin-main) .button:hover{background:#b17e4b}
+body:has(.admin-main) button.warning{background:#b98137}
+body:has(.admin-main) button.danger{background:#a64f45}
+body:has(.admin-main) button.success{background:#527b54}
+body:has(.admin-main) .button.secondary{background:#2a1e17;border-color:#59402e;color:#ecddc9}
+@media(max-width:900px){body:has(.admin-main) .sidebar{background:#211813;border-color:#3a2a20}}
+
+
+/* Bookish landing page and member login */
+body:has(.hero){background:#f6f1e8;color:#403126}
+body:has(.hero) .navbar{background:#fbf8f1;border-bottom-color:#e7dccb;box-shadow:0 3px 16px #47321d0a}
+body:has(.hero) .navbar .brand{color:#493427}
+body:has(.hero) .navbar .brand span{color:#76543b;-webkit-text-fill-color:#76543b}
+body:has(.hero) .nav-links>a:not(.button){color:#75614e}
+body:has(.hero) .hero{padding-top:100px;padding-bottom:70px;background:radial-gradient(ellipse at 50% 0,#ead9bd 0,transparent 65%)}
+body:has(.hero) .hero h1{color:#39291f;font-family:Georgia,"Times New Roman",serif;letter-spacing:-1px}
+body:has(.hero) .hero p{color:#776654}
+body:has(.hero) .gradient{color:#8a6039;-webkit-text-fill-color:#8a6039}
+body:has(.hero) .button,body:has(.hero) button{background:#765238;box-shadow:0 5px 14px #50351f20}
+body:has(.hero) .button:hover,body:has(.hero) button:hover{background:#60432e}
+body:has(.hero) .button.secondary{background:#fbf8f1;border-color:#d9c9b3;color:#624832;box-shadow:none}
+body:has(.hero) .stat,body:has(.hero) .card{background:#fffdf8;border-color:#e8ddcd;box-shadow:0 6px 20px #4935220c}
+body:has(.hero) .stat strong{color:#8a6039}
+body:has(.hero) .book-icon{background:linear-gradient(145deg,#f0e5d2,#e1cfb4);color:#765238}
+body:has(.hero) .genre{background:#efe4d3;color:#765238}
+body:has(.hero) input{background:#fffdf8;border-color:#dfd2c0;color:#463629}
+body:has(.hero) .section-title{font-family:Georgia,"Times New Roman",serif;color:#3c2b20}
+body:has(.hero) .footer{border-color:#e5d9c8;color:#88745e}
+/* Warm off-white member login */
+body:has(.login-wrap):not(:has(.admin-main)):not(:has(.login-wrap .warning)){background:#eee4d5;color:#403126}
+body:has(.login-wrap):not(:has(.admin-main)):not(:has(.login-wrap .warning)) .login-wrap{background:radial-gradient(ellipse at 50% 0,#e1cda9 0,transparent 58%),#eee4d5}
+body:has(.login-wrap):not(:has(.admin-main)):not(:has(.login-wrap .warning)) .login-card{background:#fffaf2;border-color:#e3d5c1;box-shadow:0 18px 45px #513a211b}
+body:has(.login-wrap):not(:has(.admin-main)):not(:has(.login-wrap .warning)) .login-card h1{color:#3f2d21;font-family:Georgia,"Times New Roman",serif}
+body:has(.login-wrap):not(:has(.admin-main)):not(:has(.login-wrap .warning)) .login-card>p{color:#806c56}
+body:has(.login-wrap):not(:has(.admin-main)):not(:has(.login-wrap .warning)) label{color:#725d47}
+body:has(.login-wrap):not(:has(.admin-main)):not(:has(.login-wrap .warning)) input{background:#fffdf9;border-color:#dfd1bd;color:#443428}
+body:has(.login-wrap):not(:has(.admin-main)):not(:has(.login-wrap .warning)) input:focus{outline:3px solid #9d774533;border-color:#a47b4f}
+body:has(.login-wrap):not(:has(.admin-main)):not(:has(.login-wrap .warning)) .login-card button{background:#765238}
+/* Admin login follows the dark cocoa admin palette */
+body:has(.login-wrap .warning){background:#17120f;color:#eee3d3}
+body:has(.login-wrap .warning) .login-wrap{background:radial-gradient(ellipse at 50% 0,#3b291c 0,transparent 62%),#17120f}
+body:has(.login-wrap .warning) .login-card{background:#261b15;border-color:#493427;color:#efe4d4;box-shadow:0 18px 50px #08050366}
+body:has(.login-wrap .warning) .login-card h1{color:#fbf0df;font-family:Georgia,"Times New Roman",serif}
+body:has(.login-wrap .warning) .login-card>p{color:#c2ae96}
+body:has(.login-wrap .warning) .login-card .brand span{color:#e0bd8a;-webkit-text-fill-color:#e0bd8a}
+body:has(.login-wrap .warning) .login-card label{color:#cfbda7}
+body:has(.login-wrap .warning) .login-card input{background:#1c1511;border-color:#5a4130;color:#f1e6d7}
+body:has(.login-wrap .warning) .login-card input::placeholder{color:#a18b73}
+body:has(.login-wrap .warning) .login-card .muted{color:#b1a08d}
+body:has(.login-wrap .warning) .login-card button{background:#9b6b3e}
+
+
+/* Login refinements: no top navigation, clear member/admin distinction */
+body:has(.login-wrap)>.navbar{display:none}
+.login-wrap{min-height:100vh}
+.login-card .login-brand span{color:#765238!important;-webkit-text-fill-color:#765238!important}
+.login-actions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.login-actions button,.login-actions .button{width:100%;min-height:44px;margin:0}
+.login-actions .login-cancel{display:inline-flex;background:#f2e8da;border:1px solid #decbb2;color:#624832;box-shadow:none}
+.login-actions .login-cancel:hover{background:#e9d9c4}
+body:has(.login-wrap .warning){background:#3e291d}
+body:has(.login-wrap .warning) .login-wrap{background:radial-gradient(ellipse at 50% 0,#6b4931 0,transparent 65%),#3e291d}
+body:has(.login-wrap .warning) .login-card{background:#fffaf2;border-color:#e3d5c1;color:#403126;box-shadow:0 18px 45px #20130944}
+body:has(.login-wrap .warning) .login-card h1{color:#3f2d21}
+body:has(.login-wrap .warning) .login-card>p{color:#806c56}
+body:has(.login-wrap .warning) .login-card p[style*="color"]{color:#976d3d!important}
+body:has(.login-wrap .warning) .login-card label{color:#725d47}
+body:has(.login-wrap .warning) .login-card input{background:#fffdf9;border-color:#dfd1bd;color:#443428}
+body:has(.login-wrap .warning) .login-card input::placeholder{color:#927e68}
+body:has(.login-wrap .warning) .login-card .muted{color:#806c56}
+body:has(.login-wrap .warning) .login-card button{background:#765238;color:#fffaf2}
+body:has(.login-wrap .warning) .login-card button:hover{background:#60432e}
+/* Admin content uses the same warm cards and grids as member pages,
+   with cocoa page background and sidebar. */
+body:has(.admin-main){background:#39251a;color:#3f3025}
+body:has(.admin-main) .sidebar{background:#2c1d15;border-color:#513a29;box-shadow:5px 0 24px #1e100c55}
+body:has(.admin-main) .sidebar .brand{color:#f8efe2}
+body:has(.admin-main) .sidebar .brand span{color:#ead7bb;-webkit-text-fill-color:#ead7bb}
+body:has(.admin-main) .sidebar>small{color:#c9a477}
+body:has(.admin-main) .sidebar nav a{color:#d0bdab}
+body:has(.admin-main) .sidebar nav a:hover,body:has(.admin-main) .sidebar nav .active{background:#59402d;color:#f4d7a8}
+body:has(.admin-main) .sidebar-user{border-color:#513a29;color:#c1aa92}
+body:has(.admin-main) .sidebar-user strong{color:#fbf1e3}
+body:has(.admin-main) .sidebar-user a{color:#e3a08a}
+body:has(.admin-main) .admin-main{background:#503728;color:#f8efe2}
+body:has(.admin-main) .page-heading h1{color:#fff6e9}
+body:has(.admin-main) .page-heading p,body:has(.admin-main) .admin-main .muted{color:#ddcbb6}
+body:has(.admin-main) .stat,body:has(.admin-main) .card,body:has(.admin-main) .modal{background:#fffaf2;border:1px solid #e8ddcd;border-radius:14px;color:#403126;box-shadow:0 6px 20px #27180f25}
+body:has(.admin-main) .dashboard-stats .stat{min-height:115px}
+body:has(.admin-main) .dashboard-stats .stat strong{color:#765238!important}
+body:has(.admin-main) .stat small{color:#806c56}
+body:has(.admin-main) .table-card h2{color:#493528}
+body:has(.admin-main) table{color:#544333;background:#fffaf2}
+body:has(.admin-main) th{background:#f0e7da;color:#755f49}
+body:has(.admin-main) th,body:has(.admin-main) td{border-color:#e7dccd}
+body:has(.admin-main) tr:hover td{background:#f8f1e7}
+body:has(.admin-main) input,body:has(.admin-main) select,body:has(.admin-main) textarea{background:#fffdf9;border-color:#dfd1bd;color:#443428}
+body:has(.admin-main) input::placeholder,body:has(.admin-main) textarea::placeholder{color:#927e68}
+body:has(.admin-main) label{color:#725d47}
+body:has(.admin-main) .modal summary{color:#765238}
+body:has(.admin-main) .chart{background:#f1e8db;border-radius:10px}
+body:has(.admin-main) .chart .bar{background:linear-gradient(#c59c68,#765238)}
+body:has(.admin-main) .chart .bar span{color:#806c56}
+body:has(.admin-main) .badge-active,body:has(.admin-main) .badge-paid,body:has(.admin-main) .badge-approved,body:has(.admin-main) .badge-returned,body:has(.admin-main) .badge-resolved{color:#416547;background:#e4f0e3}
+body:has(.admin-main) .badge-overdue,body:has(.admin-main) .badge-blocked,body:has(.admin-main) .badge-unpaid,body:has(.admin-main) .badge-rejected{color:#9b453d;background:#f8e5df}
+body:has(.admin-main) .badge-pending{color:#876127;background:#f6edcf}
+body:has(.admin-main) .notice{border-color:#e0c59f;background:#f8edda;color:#704d2e}
+body:has(.admin-main) button,body:has(.admin-main) .button{background:#765238;color:#fffaf2;box-shadow:0 4px 10px #54372020}
+body:has(.admin-main) button:hover,body:has(.admin-main) .button:hover{background:#60432e}
+body:has(.admin-main) button.warning{background:#a6793e}
+body:has(.admin-main) button.danger{background:#a64f45}
+body:has(.admin-main) button.success{background:#527b54}
+body:has(.admin-main) .button.secondary{background:#f2e8da;border-color:#decbb2;color:#624832}
+@media(max-width:900px){body:has(.admin-main) .sidebar{background:#2c1d15;border-color:#513a29}}
+@media(max-width:560px){.login-card{padding:24px}.login-actions{grid-template-columns:1fr}}
+
+
+.admin-id-search{margin:18px 0;align-items:center}
+.admin-id-search input{width:auto;min-width:180px;max-width:320px;flex:1}
+.admin-id-search .button,.admin-id-search button{white-space:nowrap}
+@media(max-width:620px){.admin-id-search{align-items:stretch}.admin-id-search input{min-width:100%;max-width:none}.admin-id-search .button,.admin-id-search button{flex:1}}
+
+
+/* Compact admin filter cards */
+body:has(.admin-main) .admin-id-search{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr)) auto auto;align-items:center;gap:10px;
+  width:100%;margin:14px 0;padding:12px 14px;background:#fffaf2;border:1px solid #e8ddcd;
+  border-radius:12px;box-shadow:0 4px 14px #27180f12
+}
+body:has(.admin-main) .admin-id-search input{
+  width:100%;min-width:0;max-width:none;flex:none;margin:0;background:#fffdf9;border-color:#dfd1bd
+}
+body:has(.admin-main) .admin-id-search button,
+body:has(.admin-main) .admin-id-search .button{min-height:40px;padding:8px 14px;white-space:nowrap}
+body:has(.admin-main) .admin-id-search:not(:has(input[name="book_id"])){
+  grid-template-columns:minmax(0,1fr) auto auto
+}
+@media(max-width:640px){
+  body:has(.admin-main) .admin-id-search{grid-template-columns:1fr 1fr}
+  body:has(.admin-main) .admin-id-search input{grid-column:1/-1}
+}
+
+.brand-logo,.member-brand-logo{object-fit:contain;background:transparent!important;padding:1px}

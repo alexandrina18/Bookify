@@ -8,8 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 page_head('Login Anggota');
 ?>
-<main class="login-wrap"><section class="card login-card"><a class="brand" style="display:block;text-align:center" href="<?= e(url('index.php')) ?>">▣ <span>Bookify</span></a><h1>Selamat Datang!</h1><p>Login dengan ID Anggota kamu</p>
+<main class="login-wrap"><section class="card login-card"><a class="brand login-brand" href="<?= e(url('index.php')) ?>"><img class="brand-logo" src="<?= e(url('assets/bookify-logo.png')) ?>" alt=""> <span>Bookify</span></a><h1>Selamat Datang!</h1><p>Login dengan ID Anggota kamu</p>
 <?php if ($error): ?><p class="notice"><?= e($error) ?></p><?php endif; ?>
-<form method="post"><div class="form-row"><label>ID Anggota</label><input name="member_id" placeholder="Contoh: MBR001" required autofocus></div><div class="form-row"><label>Password</label><input type="password" name="password" placeholder="Masukkan password" required></div><button style="width:100%">Masuk</button></form>
+<form method="post"><div class="form-row"><label>ID Anggota</label><input name="member_id" placeholder="Contoh: MBR001" required autofocus></div><div class="form-row"><label>Password</label><input type="password" name="password" placeholder="Masukkan password" required></div><div class="login-actions"><button>Masuk</button><a class="button secondary login-cancel" href="<?= e(url('index.php')) ?>">Batal</a></div></form>
 <p class="muted" style="margin-top:20px">Demo: <b>MBR001</b> / <b>member123</b></p><p style="text-align:center"><a class="muted" href="<?= e(url('admin/login.php')) ?>">Login sebagai Admin →</a></p></section></main>
 <?php page_foot(); ?>

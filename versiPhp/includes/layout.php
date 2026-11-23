@@ -14,7 +14,7 @@ function page_head(string $title, bool $admin = false): void
 function public_nav(): void
 {
     $user = current_user();
-    echo '<nav class="navbar"><a class="brand" href="' . e(url('index.php')) . '">▣ <span>Bookify</span></a><div class="nav-links">';
+    echo '<nav class="navbar"><a class="brand" href="' . e(url('index.php')) . '"><img class="brand-logo" src="' . e(url('assets/bookify-logo.png')) . '" alt=""> <span>Bookify</span></a><div class="nav-links">';
     echo '<a href="' . e(url('index.php#catalog')) . '">Katalog</a>';
     if ($user) {
         echo '<a href="' . e(url($user['role'] === 'admin' ? 'admin/dashboard.php' : 'member/dashboard.php')) . '">Dashboard</a><a href="' . e(url('logout.php')) . '">Keluar</a>';
@@ -33,7 +33,7 @@ function admin_nav(): void
         'extensions.php' => 'Perpanjangan', 'complaints.php' => 'Pengaduan', 'budget.php' => 'Anggaran',
     ];
     $current = basename($_SERVER['PHP_SELF'] ?? '');
-    echo '<aside class="sidebar"><a class="brand" href="' . e(url('index.php')) . '">▣ <span>Bookify</span></a><small>ADMIN PANEL</small><nav>';
+    echo '<aside class="sidebar"><a class="brand" href="' . e(url('index.php')) . '"><img class="brand-logo" src="' . e(url('assets/bookify-logo.png')) . '" alt=""> <span>Bookify</span></a><small>ADMIN PANEL</small><nav>';
     foreach ($links as $file => $label) {
         echo '<a class="' . ($current === $file ? 'active' : '') . '" href="' . e(url('admin/' . $file)) . '">' . e($label) . '</a>';
     }

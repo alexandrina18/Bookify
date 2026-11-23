@@ -136,11 +136,11 @@ function seed_database(PDO $db): void
         $insertUser = $db->prepare('INSERT INTO users (member_id,name,email,phone,gender,address,password,role,status) VALUES (?,?,?,?,?,?,?,?,?)');
         $insertUser->execute(['ADMIN001', 'Administrator', 'admin@bookify.id', '081234567890', 'male', 'Perpustakaan Bookify', password_hash('admin123', PASSWORD_DEFAULT), 'admin', 'active']);
         foreach ([
-            ['MBR001', 'Andi Pratama', 'andi@email.com', '081111111111', 'male', 'Jl. Merdeka No. 1'],
-            ['MBR002', 'Sari Dewi', 'sari@email.com', '082222222222', 'female', 'Jl. Pahlawan No. 5'],
-            ['MBR003', 'Budi Santoso', 'budi@email.com', '083333333333', 'male', 'Jl. Pemuda No. 10'],
-            ['MBR004', 'Lina Kusuma', 'lina@email.com', '084444444444', 'female', 'Jl. Diponegoro No. 20'],
-            ['MBR005', 'Reza Firmansyah', 'reza@email.com', '085555555555', 'male', 'Jl. Sudirman No. 15'],
+            ['MBR001', 'Jolanda Aurelia Susanto', 'andi@email.com', '081111111111', 'female', 'Jl. Merdeka No. 1'],
+            ['MBR002', 'Theodora Trixie Sundari', 'sari@email.com', '082222222222', 'female', 'Jl. Pahlawan No. 5'],
+            ['MBR003', 'Alexandrina Immanuela Sahar', 'budi@email.com', '083333333333', 'female', 'Jl. Pemuda No. 10'],
+            ['MBR004', 'Bonifasius Frith Farandy', 'lina@email.com', '084444444444', 'male', 'Jl. Diponegoro No. 20'],
+            ['MBR005', 'Thomas Nova Wibisono', 'reza@email.com', '085555555555', 'male', 'Jl. Sudirman No. 15'],
         ] as $member) {
             $insertUser->execute([...$member, password_hash('member123', PASSWORD_DEFAULT), 'member', 'active']);
         }

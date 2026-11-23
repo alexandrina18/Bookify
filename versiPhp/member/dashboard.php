@@ -18,7 +18,7 @@ page_head('Dashboard Anggota');
 ?>
 <main class="member-app">
     <aside class="member-sidebar">
-        <a class="member-brand" href="<?= e(url('index.php')) ?>"><span class="member-brand-icon">⌂</span> Bookify</a>
+        <a class="member-brand" href="<?= e(url('index.php')) ?>"><img class="member-brand-logo" src="<?= e(url('assets/bookify-logo.png')) ?>" alt=""> Bookify</a>
         <nav class="member-menu" aria-label="Navigasi anggota">
             <a class="selected" href="<?= e(url('member/dashboard.php')) ?>"><span>⌂</span> Jelajahi</a>
             <a href="#kategori"><span>▤</span> Kategori</a>
