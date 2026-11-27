@@ -19,7 +19,7 @@ function public_nav(): void
     if ($user) {
         echo '<a href="' . e(url($user['role'] === 'admin' ? 'admin/dashboard.php' : 'member/dashboard.php')) . '">Dashboard</a><a href="' . e(url('logout.php')) . '">Keluar</a>';
     } else {
-        echo '<a class="button secondary" href="' . e(url('login.php')) . '">Login Anggota</a><a class="button" href="' . e(url('admin/login.php')) . '">Admin</a>';
+        echo '<a href="' . e(url('login.php')) . '">Login Anggota</a><a class="button" href="' . e(url('admin/login.php')) . '">Admin</a>';
     }
     echo '</div></nav>';
 }

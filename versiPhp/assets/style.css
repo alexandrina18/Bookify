@@ -376,3 +376,71 @@ body:has(.admin-main) .sidebar .brand-logo{width:42px;height:42px;padding:4px;ba
 .member-form{display:none;gap:14px;margin-top:18px;padding:18px;background:#f7f0e5;border:1px solid #e8dcc9;border-radius:12px}.member-form.visible{display:grid}.member-form label{display:grid;gap:7px;color:#725d47}.member-section>label{display:block;margin:14px 0 7px;color:#725d47}.history-item{padding:13px 0;border-bottom:1px solid #ebe1d4;color:#604832}.history-item p{margin:6px 0}.history-item small{color:#927e68}
 @media(max-width:900px){.member-app:has(.member-feature-panel){grid-template-columns:195px minmax(0,1fr)}.member-app:has(.member-feature-panel) .member-feature-panel{grid-column:1/-1}}
 @media(max-width:720px){.member-app,.member-app:has(.member-feature-panel){grid-template-columns:1fr}.member-app:has(.member-feature-panel) .member-feature-panel{grid-column:auto}.member-filters{grid-template-columns:1fr 1fr}.member-identity{flex-wrap:wrap}.member-barcode{margin-left:0}}
+
+/* Consistent button system for Bookify - IMPORTANT STYLES */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:8px;padding:10px 16px;font-family:Georgia,"Times New Roman",serif!important;font-weight:700!important;font-size:13px!important;cursor:pointer;transition:all 0.2s ease;text-decoration:none;white-space:nowrap}
+.btn:disabled{opacity:0.6;cursor:not-allowed}
+.btn-primary{background:#765238!important;color:#fffaf2!important;box-shadow:0 3px 8px #54372015!important}
+.btn-primary:hover:not(:disabled){background:#60432e!important;transform:translateY(-1px);box-shadow:0 4px 12px #54372025!important}
+.btn-primary:active:not(:disabled){transform:translateY(0)}
+.btn-secondary{background:#f2e8da!important;border:1px solid #decbb2!important;color:#624832!important;box-shadow:none!important}
+.btn-secondary:hover:not(:disabled){background:#e9d9c4!important;border-color:#d4c2a8}
+.btn-success{background:#527b54!important;color:#fffaf2!important;box-shadow:0 3px 8px #3d5c3f15!important}
+.btn-success:hover:not(:disabled){background:#426644!important;transform:translateY(-1px);box-shadow:0 4px 12px #3d5c3f25!important}
+.btn-danger{background:#a64f45!important;color:#fffaf2!important;box-shadow:0 3px 8px #7a3a3315!important}
+.btn-danger:hover:not(:disabled){background:#8a4037!important;transform:translateY(-1px);box-shadow:0 4px 12px #7a3a3a25!important}
+.btn-warning{background:#a6793e!important;color:#fffaf2!important;box-shadow:0 3px 8px #7a5a2e15!important}
+.btn-warning:hover:not(:disabled){background:#8a6632!important;transform:translateY(-1px);box-shadow:0 4px 12px #7a5a2e25!important}
+.btn-disabled{background:#ddd8d1!important;color:#898176!important;cursor:not-allowed;box-shadow:none}
+.btn-sm{padding:7px 12px;font-size:12px!important}
+.btn-lg{padding:12px 20px;font-size:14px!important}
+.btn-block{width:100%}
+
+/* FORCE BUTTON STYLES - Override all existing button styles */
+.member-filters button,.member-form button,.member-section>form button,.detail-pinjam-form button{font-family:Georgia,"Times New Roman",serif!important;font-size:13px!important;font-weight:700!important;padding:10px 16px!important;background:#765238!important;color:#fffaf2!important;cursor:pointer;border:0!important;border-radius:8px!important;box-shadow:0 3px 8px #54372015!important;transition:all 0.2s ease}
+.member-filters button:hover,.member-form button:hover,.member-section>form button:hover,.detail-pinjam-form button:hover{background:#60432e!important;transform:translateY(-1px);box-shadow:0 4px 12px #54372025!important}
+.member-filters button:disabled,.member-form button:disabled,.member-section>form button:disabled,.detail-pinjam-form button:disabled{background:#ddd8d1!important;color:#898176!important;cursor:not-allowed;transform:none;box-shadow:none}
+.renew-link,.fine-link,.payment-resume-link,.member-table-wrap a[href*="pelacakan.php"],.member-table-wrap a[href*="pembayaran.php"]{padding:7px 12px!important;background:#765238!important;color:#fffaf2!important;border-radius:8px;font:700 12px Georgia,"Times New Roman",serif!important;white-space:nowrap;box-shadow:0 2px 6px #54372010!important;transition:all 0.2s ease;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.renew-link:hover,.fine-link:hover,.payment-resume-link:hover,.member-table-wrap a[href*="pelacakan.php"]:hover,.member-table-wrap a[href*="pembayaran.php"]:hover{background:#60432e!important;transform:translateY(-1px);box-shadow:0 3px 10px #54372020!important}
+.renew-disabled,.renew-disabled:disabled{background:#ddd8d1!important;color:#898176!important;cursor:not-allowed;opacity:1;box-shadow:none;transform:none}
+.feature-button{background:#b98a4e!important;color:#fffaf0!important;box-shadow:0 3px 8px #8a6a3a15!important;transition:all 0.2s ease}
+.feature-button:hover{background:#a3753d!important;transform:translateY(-1px);box-shadow:0 4px 12px #8a6a3a25!important}
+.member-see-all{padding:7px 12px;border-radius:8px;background:#f2e7d7!important;color:#68472e!important;font-size:12px;font-weight:700;transition:all 0.2s ease;box-shadow:none}
+.member-see-all:hover{background:#e5d9c8!important;color:#5a3d26}
+
+/* Payment page specific buttons */
+.payment-choice,.bank-choice{display:flex;align-items:flex-start;gap:12px;padding:14px;border:1px solid #e8dcc9;border-radius:10px;background:#f7f0e5;color:#604832;letter-spacing:normal;text-transform:none;font-size:14px;transition:all 0.2s ease;cursor:pointer}
+.payment-choice:hover,.bank-choice:hover{border-color:#c9a86d;background:#f2e8da}
+.payment-choice input,.bank-choice input{width:auto;margin:3px 0 0}
+.pay-button{background:#527b54!important;color:#fffaf2!important;border:0;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 3px 8px #3d5c3f15!important;transition:all 0.2s ease;width:100%;font-family:Georgia,"Times New Roman",serif!important}
+.pay-button:hover{background:#426644!important;transform:translateY(-1px);box-shadow:0 4px 12px #3d5c3f25!important}
+.copy-button{background:#a6793e!important;color:#fffaf2!important;border:0;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;box-shadow:0 2px 6px #7a5a2e10!important;transition:all 0.2s ease;font-family:Georgia,"Times New Roman",serif!important}
+.copy-button:hover{background:#8a6632!important;transform:translateY(-1px);box-shadow:0 3px 10px #7a5a2e20!important}
+
+/* Admin page buttons - FORCE STYLES */
+body:has(.admin-main) button,body:has(.admin-main) .button{background:#765238!important;color:#fffaf2!important;box-shadow:0 3px 8px #54372015!important;border-radius:8px;padding:10px 16px;font-family:Georgia,"Times New Roman",serif!important;font-weight:700;font-size:13px!important;transition:all 0.2s ease}
+body:has(.admin-main) button:hover,body:has(.admin-main) .button:hover{background:#60432e!important;transform:translateY(-1px);box-shadow:0 4px 12px #54372025!important}
+body:has(.admin-main) button.warning{background:#a6793e!important;box-shadow:0 3px 8px #7a5a2e15!important}
+body:has(.admin-main) button.warning:hover{background:#8a6632!important}
+body:has(.admin-main) button.danger{background:#a64f45!important;box-shadow:0 3px 8px #7a3a3315!important}
+body:has(.admin-main) button.danger:hover{background:#8a4037!important}
+body:has(.admin-main) button.success{background:#527b54!important;box-shadow:0 3px 8px #3d5c3f15!important}
+body:has(.admin-main) button.success:hover{background:#426644!important}
+body:has(.admin-main) .button.secondary{background:#f2e8da!important;border-color:#decbb2;color:#624832!important;box-shadow:none}
+body:has(.admin-main) .button.secondary:hover{background:#e9d9c4!important;border-color:#d4c2a8}
+body:has(.admin-main) button:disabled{background:#ddd8d1!important;color:#898176!important;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* Landing page buttons - FORCE STYLES */
+body:has(.hero) .button,body:has(.hero) button{background:#765238!important;box-shadow:0 3px 8px #54372015!important;border-radius:8px;padding:10px 16px;font-family:Georgia,"Times New Roman",serif!important;font-weight:700;font-size:13px!important;transition:all 0.2s ease}
+body:has(.hero) .button:hover,body:has(.hero) button:hover{background:#60432e!important;transform:translateY(-1px);box-shadow:0 4px 12px #54372025!important}
+body:has(.hero) .button.secondary{background:#fbf8f1;border-color:#d9c9b3;color:#624832;box-shadow:none}
+body:has(.hero) .button.secondary:hover{background:#f2e8da;border-color:#d4c2a8}
+
+/* Login page buttons - FORCE STYLES */
+body:has(.login-wrap) .login-card button{background:#765238!important;color:#fffaf2!important;border-radius:8px;padding:12px 20px;font-family:Georgia,"Times New Roman",serif!important;font-weight:700;font-size:14px;box-shadow:0 3px 8px #54372015!important;transition:all 0.2s ease}
+body:has(.login-wrap) .login-card button:hover{background:#60432e!important;transform:translateY(-1px);box-shadow:0 4px 12px #54372025!important}
+.login-cancel{display:inline-flex;background:#f2e8da;border:1px solid #decbb2;color:#624832;box-shadow:none;border-radius:8px;padding:12px 20px;font-family:Georgia,"Times New Roman",serif;font-weight:700;font-size:14px;transition:all 0.2s ease}
+.login-cancel:hover{background:#e9d9c4;border-color:#d4c2a8}
+
+/* Responsive adjustments */
+@media(max-width:720px){.btn{padding:8px 14px;font-size:12px!important}.btn-sm{padding:6px 10px;font-size:11px!important}.btn-lg{padding:10px 16px;font-size:13px!important}}
