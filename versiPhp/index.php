@@ -1,5 +1,7 @@
 <?php
 require_once __DIR__ . '/includes/layout.php';
+$signedIn = current_user();
+if ($signedIn && $signedIn['role'] === 'member') { redirect('member/dashboard.php'); }
 $search = trim($_GET['search'] ?? '');
 $sql = 'SELECT b.*, p.name AS publisher_name FROM books b LEFT JOIN publishers p ON p.id=b.publisher_id';
 $params = [];
@@ -28,7 +30,7 @@ page_head('Perpustakaan Digital');
   <form class="search" method="get"><input name="search" value="<?= e($search) ?>" placeholder="Cari judul, pengarang, genre, atau ID buku..."><button>Cari</button></form>
   <div class="grid">
   <?php foreach ($books as $book): ?>
-    <article class="card book-card"><div class="book-icon">▤</div><div style="margin-top:12px"><span class="genre"><?= e($book['genre'] ?: 'Umum') ?></span><h3><?= e($book['title']) ?></h3><p class="muted" style="margin:0"><?= e($book['author']) ?></p><?php if ($book['publisher_name']): ?><small class="muted"><?= e($book['publisher_name']) ?></small><?php endif; ?><p class="<?= $book['available'] > 0 ? 'available' : 'unavailable' ?>"><b><?= $book['available'] > 0 ? $book['available'] . ' tersedia' : 'Tidak tersedia' ?></b> <small class="muted">· <?= e($book['book_id']) ?></small></p></div></article>
+    <article class="card book-card"><div class="book-icon">▤</div><div style="margin-top:12px"><span class="genre"><?= e($book['genre'] ?: 'Umum') ?></span><h3><?= e($book['title']) ?></h3><p class="muted" style="margin:0"><?= e($book['author']) ?></p><?php if ($book['publisher_name']): ?><small class="muted"><?= e($book['publisher_name']) ?></small><?php endif; ?><p class="<?= $book['available'] > 0 ? 'available' : 'unavailable' ?>"><b><?= $book['available'] > 0 ? $book['available'] . ' tersedia' : 'Tidak tersedia' ?></b> <small class="muted">· <?= e($book['book_id']) ?></small></p><?php $bookReviews=rows('SELECT r.rating,r.review,r.created_at,u.name FROM reviews r JOIN users u ON u.id=r.user_id JOIN books k ON k.id=r.book_id WHERE r.book_id=? ORDER BY r.created_at DESC LIMIT 2',[$book['id']]); foreach($bookReviews as $review):?><p class="landing-review"><b><?=str_repeat('★',(int)$review['rating'])?></b> <?=e($review['review'])?><small> — <?=e($review['name'])?></small></p><?php endforeach;?></div></article>
   <?php endforeach; ?>
   <?php if (!$books): ?><p class="muted">Tidak ada buku ditemukan.</p><?php endif; ?>
   </div>

@@ -5,6 +5,7 @@ declare(strict_types=1);
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
+date_default_timezone_set('Asia/Jakarta');
 
 const APP_NAME = 'Bookify';
 const DB_FILE = __DIR__ . '/../storage/bookify.sqlite';
@@ -71,7 +72,7 @@ function initialise_database(PDO $db): void
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT, member_id TEXT NOT NULL UNIQUE, name TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE, phone TEXT, gender TEXT, address TEXT, password TEXT NOT NULL,
-    role TEXT NOT NULL DEFAULT 'member', status TEXT NOT NULL DEFAULT 'active',
+    role TEXT NOT NULL DEFAULT 'member', status TEXT NOT NULL DEFAULT 'active', photo_path TEXT, nik TEXT,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE IF NOT EXISTS publishers (
@@ -80,7 +81,7 @@ CREATE TABLE IF NOT EXISTS publishers (
 );
 CREATE TABLE IF NOT EXISTS books (
     id INTEGER PRIMARY KEY AUTOINCREMENT, book_id TEXT NOT NULL UNIQUE, title TEXT NOT NULL, author TEXT NOT NULL,
-    year INTEGER, pages INTEGER, genre TEXT, stock INTEGER NOT NULL DEFAULT 1, available INTEGER NOT NULL DEFAULT 1,
+    year INTEGER, pages INTEGER, genre TEXT, synopsis TEXT, stock INTEGER NOT NULL DEFAULT 1, available INTEGER NOT NULL DEFAULT 1,
     cover_url TEXT, publisher_id INTEGER, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (publisher_id) REFERENCES publishers(id) ON DELETE SET NULL
@@ -89,6 +90,9 @@ CREATE TABLE IF NOT EXISTS borrowings (
     id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, book_id INTEGER NOT NULL,
     borrowed_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, due_date TEXT NOT NULL, returned_at TEXT,
     status TEXT NOT NULL DEFAULT 'active', renew_count INTEGER NOT NULL DEFAULT 0,
+    fulfillment_method TEXT, pickup_deadline TEXT, shipping_fee INTEGER NOT NULL DEFAULT 0,
+    receipt_no TEXT, estimated_delivery TEXT, payment_method TEXT, paid_at TEXT, delivery_address TEXT, payment_deadline TEXT,
+    history_visible INTEGER NOT NULL DEFAULT 1,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id), FOREIGN KEY (book_id) REFERENCES books(id)
 );
@@ -107,16 +111,28 @@ CREATE TABLE IF NOT EXISTS fines (
 CREATE TABLE IF NOT EXISTS extensions (
     id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, borrowing_id INTEGER NOT NULL,
     requested_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, new_due_date TEXT, status TEXT NOT NULL DEFAULT 'pending',
+    reason TEXT, duration_days INTEGER NOT NULL DEFAULT 7,
     admin_note TEXT, reviewed_at TEXT, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id), FOREIGN KEY (borrowing_id) REFERENCES borrowings(id)
 );
 CREATE TABLE IF NOT EXISTS complaints (
     id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, book_id INTEGER NOT NULL, type TEXT NOT NULL,
-    description TEXT, status TEXT NOT NULL DEFAULT 'pending', admin_note TEXT,
+    description TEXT, photo_path TEXT, status TEXT NOT NULL DEFAULT 'pending', admin_note TEXT,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id), FOREIGN KEY (book_id) REFERENCES books(id)
 );
+CREATE TABLE IF NOT EXISTS reviews (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, book_id INTEGER NOT NULL,
+    rating INTEGER NOT NULL, review TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id), FOREIGN KEY (book_id) REFERENCES books(id)
+);
+CREATE TABLE IF NOT EXISTS fine_reminders (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, fine_id INTEGER NOT NULL UNIQUE, user_id INTEGER NOT NULL,
+    next_reminder_at TEXT NOT NULL, ends_at TEXT NOT NULL, last_sent_at TEXT, sent_count INTEGER NOT NULL DEFAULT 0,
+    FOREIGN KEY (fine_id) REFERENCES fines(id), FOREIGN KEY (user_id) REFERENCES users(id)
+);
+CREATE TABLE IF NOT EXISTS app_migrations (name TEXT PRIMARY KEY, applied_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
 CREATE TABLE IF NOT EXISTS budgets (
     id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT NOT NULL, description TEXT NOT NULL, amount INTEGER NOT NULL,
     type TEXT NOT NULL, date TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -124,8 +140,54 @@ CREATE TABLE IF NOT EXISTS budgets (
 );
 SQL);
 
+    $userColumns = array_column($db->query('PRAGMA table_info(users)')->fetchAll(), 'name');
+    if (!in_array('photo_path', $userColumns, true)) { $db->exec('ALTER TABLE users ADD COLUMN photo_path TEXT'); }
+    if (!in_array('nik', $userColumns, true)) { $db->exec('ALTER TABLE users ADD COLUMN nik TEXT'); }
+    $db->exec("UPDATE users SET address=address||', Semarang' WHERE email IN ('andi@email.com','sari@email.com','budi@email.com','lina@email.com','reza@email.com') AND address IS NOT NULL AND address NOT LIKE '%Semarang%'");
+    $db->exec("UPDATE users SET address='Perpustakaan Bookify, Semarang' WHERE member_id='ADMIN001' AND address='Perpustakaan Bookify'");
+    $db->exec("UPDATE publishers SET location='Semarang' WHERE name IN ('Gramedia Pustaka Utama','Erlangga','Mizan','Kompas') AND location IN ('Jakarta','Bandung')");
+    $bookColumns = array_column($db->query('PRAGMA table_info(books)')->fetchAll(), 'name');
+    if (!in_array('synopsis', $bookColumns, true)) { $db->exec('ALTER TABLE books ADD COLUMN synopsis TEXT'); }
+
+    $borrowingColumns = array_column($db->query('PRAGMA table_info(borrowings)')->fetchAll(), 'name');
+    foreach (['fulfillment_method'=>'TEXT','pickup_deadline'=>'TEXT','shipping_fee'=>'INTEGER NOT NULL DEFAULT 0','receipt_no'=>'TEXT','estimated_delivery'=>'TEXT','payment_method'=>'TEXT','paid_at'=>'TEXT','delivery_address'=>'TEXT','payment_deadline'=>'TEXT'] as $column=>$definition) {
+        if (!in_array($column, $borrowingColumns, true)) { $db->exec("ALTER TABLE borrowings ADD COLUMN {$column} {$definition}"); }
+    }
+    if (!in_array('history_visible', $borrowingColumns, true)) { $db->exec('ALTER TABLE borrowings ADD COLUMN history_visible INTEGER NOT NULL DEFAULT 1'); }
+    $extensionColumns = array_column($db->query('PRAGMA table_info(extensions)')->fetchAll(), 'name');
+    foreach (['reason'=>'TEXT','duration_days'=>'INTEGER NOT NULL DEFAULT 7'] as $column=>$definition) {
+        if (!in_array($column, $extensionColumns, true)) { $db->exec("ALTER TABLE extensions ADD COLUMN {$column} {$definition}"); }
+    }
+
+    // Upgrade databases created before member reporting and reviews were added.
+    $complaintColumns = array_column($db->query('PRAGMA table_info(complaints)')->fetchAll(), 'name');
+    if (!in_array('photo_path', $complaintColumns, true)) { $db->exec('ALTER TABLE complaints ADD COLUMN photo_path TEXT'); }
+
     if ((int) $db->query('SELECT COUNT(*) FROM users')->fetchColumn() === 0) {
         seed_database($db);
+    }
+
+    $seedMigration=$db->prepare('SELECT 1 FROM app_migrations WHERE name=?');
+    $seedMigration->execute(['member_mbr001_ongoing_loan_v1']);
+    if(!$seedMigration->fetchColumn()){
+        $member=$db->query("SELECT id FROM users WHERE member_id='MBR001' AND role='member'")->fetchColumn();
+        if($member && !(int)$db->query("SELECT COUNT(*) FROM borrowings WHERE user_id=".(int)$member." AND status='active'")->fetchColumn()){
+            $book=$db->query("SELECT id,available FROM books WHERE book_id='BK004'")->fetch();
+            if($book && (int)$book['available']>0){
+                $start=(new DateTimeImmutable('now',new DateTimeZone('Asia/Jakarta')))->modify('-2 days');
+                $due=$start->modify('+7 days');
+                $insert=$db->prepare("INSERT INTO borrowings(user_id,book_id,borrowed_at,due_date,status,fulfillment_method) VALUES(?,?,?,?, 'active','pickup')");
+                $insert->execute([(int)$member,(int)$book['id'],$start->format('Y-m-d H:i:s'),$due->format('Y-m-d H:i:s')]);
+                $db->prepare('UPDATE books SET available=available-1 WHERE id=?')->execute([(int)$book['id']]);
+            }
+        }
+        $db->prepare('INSERT OR IGNORE INTO app_migrations(name) VALUES(?)')->execute(['member_mbr001_ongoing_loan_v1']);
+    }
+    $hideExample=$db->prepare('SELECT 1 FROM app_migrations WHERE name=?');
+    $hideExample->execute(['hide_mbr001_bk004_history_v1']);
+    if(!$hideExample->fetchColumn()){
+        $db->exec("UPDATE borrowings SET history_visible=0 WHERE id=(SELECT br.id FROM borrowings br JOIN users u ON u.id=br.user_id JOIN books b ON b.id=br.book_id WHERE u.member_id='MBR001' AND b.book_id='BK004' AND br.status='active' AND br.fulfillment_method='pickup' ORDER BY br.id DESC LIMIT 1)");
+        $db->prepare('INSERT OR IGNORE INTO app_migrations(name) VALUES(?)')->execute(['hide_mbr001_bk004_history_v1']);
     }
 }
 
@@ -134,18 +196,18 @@ function seed_database(PDO $db): void
     $db->beginTransaction();
     try {
         $insertUser = $db->prepare('INSERT INTO users (member_id,name,email,phone,gender,address,password,role,status) VALUES (?,?,?,?,?,?,?,?,?)');
-        $insertUser->execute(['ADMIN001', 'Administrator', 'admin@bookify.id', '081234567890', 'male', 'Perpustakaan Bookify', password_hash('admin123', PASSWORD_DEFAULT), 'admin', 'active']);
+        $insertUser->execute(['ADMIN001', 'Administrator', 'admin@bookify.id', '081234567890', 'male', 'Perpustakaan Bookify, Semarang', password_hash('admin123', PASSWORD_DEFAULT), 'admin', 'active']);
         foreach ([
-            ['MBR001', 'Jolanda Aurelia Susanto', 'andi@email.com', '081111111111', 'female', 'Jl. Merdeka No. 1'],
-            ['MBR002', 'Theodora Trixie Sundari', 'sari@email.com', '082222222222', 'female', 'Jl. Pahlawan No. 5'],
-            ['MBR003', 'Alexandrina Immanuela Sahar', 'budi@email.com', '083333333333', 'female', 'Jl. Pemuda No. 10'],
-            ['MBR004', 'Bonifasius Frith Farandy', 'lina@email.com', '084444444444', 'male', 'Jl. Diponegoro No. 20'],
-            ['MBR005', 'Thomas Nova Wibisono', 'reza@email.com', '085555555555', 'male', 'Jl. Sudirman No. 15'],
+            ['MBR001', 'Jolanda Aurelia Susanto', 'andi@email.com', '081111111111', 'female', 'Jl. Merdeka No. 1, Semarang'],
+            ['MBR002', 'Theodora Trixie Sundari', 'sari@email.com', '082222222222', 'female', 'Jl. Pahlawan No. 5, Semarang'],
+            ['MBR003', 'Alexandrina Immanuela Sahar', 'budi@email.com', '083333333333', 'female', 'Jl. Pemuda No. 10, Semarang'],
+            ['MBR004', 'Bonifasius Frith Farandy', 'lina@email.com', '084444444444', 'male', 'Jl. Diponegoro No. 20, Semarang'],
+            ['MBR005', 'Thomas Nova Wibisono', 'reza@email.com', '085555555555', 'male', 'Jl. Sudirman No. 15, Semarang'],
         ] as $member) {
             $insertUser->execute([...$member, password_hash('member123', PASSWORD_DEFAULT), 'member', 'active']);
         }
         $insertPublisher = $db->prepare('INSERT INTO publishers (name,location) VALUES (?,?)');
-        foreach ([['Gramedia Pustaka Utama','Jakarta'], ['Erlangga','Jakarta'], ['Mizan','Bandung'], ['Kompas','Jakarta']] as $publisher) {
+        foreach ([['Gramedia Pustaka Utama','Semarang'], ['Erlangga','Semarang'], ['Mizan','Semarang'], ['Kompas','Semarang']] as $publisher) {
             $insertPublisher->execute($publisher);
         }
         $insertBook = $db->prepare('INSERT INTO books (book_id,title,author,year,pages,genre,stock,available,publisher_id) VALUES (?,?,?,?,?,?,?,?,?)');
