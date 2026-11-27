@@ -2,17 +2,18 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { addDays } from 'date-fns'
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const { status, adminNote } = await req.json()
 
   const extension = await prisma.extension.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: { borrowing: true },
   })
   if (!extension) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   const updated = await prisma.extension.update({
-    where: { id: params.id },
+    where: { id },
     data: {
       status,
       adminNote,
