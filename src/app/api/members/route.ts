@@ -27,26 +27,3 @@ export async function GET(req: Request) {
 
   return NextResponse.json(members)
 }
-
-export async function POST(req: Request) {
-  const body = await req.json()
-  const { memberId, name, email, phone, gender, address, password } = body
-
-  const hashedPassword = await bcrypt.hash(password || 'member123', 10)
-
-  const member = await prisma.user.create({
-    data: {
-      memberId,
-      name,
-      email,
-      phone,
-      gender,
-      address,
-      password: hashedPassword,
-      role: 'member',
-      status: 'active',
-    },
-  })
-
-  return NextResponse.json({ ...member, password: undefined })
-}

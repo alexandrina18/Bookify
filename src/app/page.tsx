@@ -46,14 +46,12 @@ export default function LandingPage() {
       <nav className="glass-dark sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center">
-              <BookOpen size={20} color="white" />
-            </div>
-            <span className="text-xl font-bold gradient-text">Bookify</span>
+            <img src="/sma-glitz-logo.jpg" alt="Logo SMA GLITZ" className="w-10 h-10 object-contain rounded-xl bg-white p-1 shadow" />
+            <span className="text-xl font-bold gradient-text">SMA GLITZ</span>
           </div>
           <div className="flex items-center gap-3">
             <Link href="/login" className="btn-secondary text-sm py-2 px-4">
-              Login Anggota
+              Login Siswa
             </Link>
             <Link href="/admin/login" className="btn-primary text-sm py-2 px-4">
               <Shield size={16} />
@@ -70,16 +68,19 @@ export default function LandingPage() {
         <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full blur-3xl opacity-10" style={{ background: 'radial-gradient(circle, #a855f7, transparent)' }} />
 
         <div className="relative z-10">
-          <div className="inline-flex items-center gap-2 glass px-4 py-2 rounded-full mb-6 text-sm text-indigo-400">
+          <div className="mb-4 inline-block">
+            <img src="/sma-glitz-logo.jpg" alt="Logo SMA GLITZ" className="w-24 h-24 object-contain rounded-2xl bg-white p-2 shadow-2xl mx-auto border-2 border-indigo-200" />
+          </div>
+          <div className="inline-flex items-center gap-2 glass px-4 py-2 rounded-full mb-6 text-sm text-indigo-400 block mx-auto w-fit">
             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-            Perpustakaan Digital Modern
+            Perpustakaan SMA GLITZ
           </div>
           <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight">
             Selamat Datang di <br />
-            <span className="gradient-text">Bookify</span>
+            <span className="gradient-text">SMA GLITZ</span>
           </h1>
           <p className="text-lg text-slate-400 max-w-2xl mx-auto mb-10">
-            Sistem perpustakaan digital terpadu. Jelajahi ribuan koleksi buku, pinjam dengan mudah, dan kelola semua aktivitas perpustakaan dalam satu platform.
+            Sistem perpustakaan digital terpadu SMA GLITZ. Siswa dapat meminjam buku secara langsung dengan deteksi data otomatis.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link href="/login" className="btn-primary text-base px-8 py-3">

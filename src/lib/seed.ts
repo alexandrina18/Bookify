@@ -11,11 +11,11 @@ export async function seedDatabase() {
     update: {},
     create: {
       memberId: 'ADMIN001',
-      name: 'Administrator',
-      email: 'admin@bookify.id',
+      name: 'Petugas Perpustakaan SMA GLITZ',
+      email: 'admin@smaglitz.sch.id',
       phone: '081234567890',
       gender: 'male',
-      address: 'Perpustakaan Bookify',
+      address: 'Perpustakaan SMA GLITZ, Jl. Glitz No. 1, Semarang',
       password: adminPass,
       role: 'admin',
       status: 'active',
@@ -68,14 +68,19 @@ export async function seedDatabase() {
     })
   }
 
-  // Members
+  // Students of SMA GLITZ
   const memberPass = await bcrypt.hash('member123', 10)
   const members = [
-    { memberId: 'MBR001', name: 'Andi Pratama', email: 'andi@email.com', phone: '081111111111', gender: 'male', address: 'Jl. Merdeka No. 1' },
-    { memberId: 'MBR002', name: 'Sari Dewi', email: 'sari@email.com', phone: '082222222222', gender: 'female', address: 'Jl. Pahlawan No. 5' },
-    { memberId: 'MBR003', name: 'Budi Santoso', email: 'budi@email.com', phone: '083333333333', gender: 'male', address: 'Jl. Pemuda No. 10' },
-    { memberId: 'MBR004', name: 'Lina Kusuma', email: 'lina@email.com', phone: '084444444444', gender: 'female', address: 'Jl. Diponegoro No. 20' },
-    { memberId: 'MBR005', name: 'Reza Firmansyah', email: 'reza@email.com', phone: '085555555555', gender: 'male', address: 'Jl. Sudirman No. 15' },
+    { memberId: 'MBR001', name: 'Jolanda Aurelia Susanto', email: 'jolanda@smaglitz.sch.id', phone: '081122334455', gender: 'female', address: 'Jl. Merdeka No. 15, Semarang' },
+    { memberId: 'MBR002', name: 'Theodora Trixie Sundari', email: 'theodora@smaglitz.sch.id', phone: '082233445566', gender: 'female', address: 'Jl. Pahlawan No. 28, Semarang' },
+    { memberId: 'MBR003', name: 'Alexandrina Immanuela Sahar', email: 'alexandrina@smaglitz.sch.id', phone: '083344556677', gender: 'female', address: 'Jl. Pemuda No. 102, Semarang' },
+    { memberId: 'MBR004', name: 'Bonifasius Frith Farandy', email: 'bonifasius@smaglitz.sch.id', phone: '084455667788', gender: 'male', address: 'Jl. Diponegoro No. 44, Semarang' },
+    { memberId: 'MBR005', name: 'Thomas Nova Wibisono', email: 'thomas@smaglitz.sch.id', phone: '085566778899', gender: 'male', address: 'Jl. Sudirman No. 89, Semarang' },
+    { memberId: 'MBR006', name: 'Aditiya Pratama', email: 'aditiya@smaglitz.sch.id', phone: '081234567801', gender: 'male', address: 'Jl. Gajah Mada No. 17, Semarang' },
+    { memberId: 'MBR007', name: 'Clarissa Putri Anindya', email: 'clarissa@smaglitz.sch.id', phone: '081234567802', gender: 'female', address: 'Jl. Pandanaran No. 56, Semarang' },
+    { memberId: 'MBR008', name: 'Dimas Arya Wicaksana', email: 'dimas@smaglitz.sch.id', phone: '081234567803', gender: 'male', address: 'Jl. Erlangga Tengah No. 9, Semarang' },
+    { memberId: 'MBR009', name: 'Felicia Evelyn Hartanto', email: 'felicia@smaglitz.sch.id', phone: '081234567804', gender: 'female', address: 'Jl. Sumbing No. 14, Semarang' },
+    { memberId: 'MBR010', name: 'Kevin Jonathan Kusumo', email: 'kevin@smaglitz.sch.id', phone: '081234567805', gender: 'male', address: 'Jl. Siranda No. 3, Semarang' },
   ]
 
   const createdMembers = []

@@ -37,13 +37,11 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 rounded-2xl gradient-bg flex items-center justify-center">
-              <BookOpen size={24} color="white" />
-            </div>
-            <span className="text-2xl font-black gradient-text">Bookify</span>
+            <img src="/sma-glitz-logo.jpg" alt="Logo SMA GLITZ" className="w-12 h-12 object-contain rounded-2xl bg-white p-1 shadow" />
+            <span className="text-2xl font-black gradient-text">SMA GLITZ</span>
           </Link>
-          <h1 className="text-3xl font-bold mb-2">Selamat Datang!</h1>
-          <p className="text-slate-400">Login dengan ID Anggota kamu</p>
+          <h1 className="text-3xl font-bold mb-2">Login Siswa</h1>
+          <p className="text-slate-400">Masuk menggunakan NIS atau ID Siswa kamu</p>
         </div>
 
         {/* Form */}

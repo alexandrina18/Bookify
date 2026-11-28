@@ -19,10 +19,8 @@ try {
     if($method==='DELETE'&&$id){execute('DELETE FROM books WHERE id=?',[$id]);api_out(['message'=>'Deleted']);}
   }
   if($resource==='members') {
-    if($method==='GET'){ $q=trim($_GET['search']??'');$sql="SELECT id,member_id,name,email,phone,gender,address,role,status,created_at FROM users WHERE role='member'";$params=[];if($id){$sql.=' AND id=?';$params=[$id];}elseif($q){$sql.=' AND (name LIKE ? OR member_id LIKE ? OR email LIKE ?)';$params=array_fill(0,3,'%'.$q.'%');}api_out($id?(one($sql,$params)??api_error('Not found',404)):rows($sql.' ORDER BY member_id',$params)); }
-    if($method==='POST'){execute('INSERT INTO users (member_id,name,email,phone,gender,address,password,role,status) VALUES (?,?,?,?,?,?,?,"member","active")',[$body['memberId']??$body['member_id'],$body['name']??'',$body['email']??'',$body['phone']??null,$body['gender']??null,$body['address']??null,password_hash($body['password']??'member123',PASSWORD_DEFAULT)]);api_out(['message'=>'Created'],201);}
-    if(in_array($method,['PUT','PATCH'],true)&&$id){execute('UPDATE users SET name=?,email=?,phone=?,gender=?,address=?,status=? WHERE id=?',[$body['name']??'',$body['email']??'',$body['phone']??null,$body['gender']??null,$body['address']??null,$body['status']??'active',$id]);api_out(['message'=>'Updated']);}
-    if($method==='DELETE'&&$id){execute('DELETE FROM users WHERE id=?',[$id]);api_out(['message'=>'Deleted']);}
+    if($method==='GET'){ $q=trim($_GET['search']??'');$sql="SELECT id,member_id,nis,name,kelas,email,phone,gender,address,role,status,created_at FROM users WHERE role='member'";$params=[];if($id){$sql.=' AND id=?';$params=[$id];}elseif($q){$sql.=' AND (name LIKE ? OR member_id LIKE ? OR nis LIKE ? OR email LIKE ?)';$params=array_fill(0,4,'%'.$q.'%');}api_out($id?(one($sql,$params)??api_error('Not found',404)):rows($sql.' ORDER BY member_id',$params)); }
+    api_error('Operasi CRUD user dinonaktifkan.', 405);
   }
   if($resource==='publishers') {
     if($method==='GET') api_out($id?(one('SELECT p.*,COUNT(b.id) books_count FROM publishers p LEFT JOIN books b ON b.publisher_id=p.id WHERE p.id=? GROUP BY p.id',[$id])??api_error('Not found',404)):rows('SELECT p.*,COUNT(b.id) books_count FROM publishers p LEFT JOIN books b ON b.publisher_id=p.id GROUP BY p.id ORDER BY p.name'));

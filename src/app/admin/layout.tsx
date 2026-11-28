@@ -16,7 +16,7 @@ const navItems = [
   { label: 'Absensi', href: '/admin/attendance', icon: QrCode },
   { label: 'Buku', href: '/admin/books', icon: Library },
   { label: 'Penerbit', href: '/admin/publishers', icon: FileWarning },
-  { label: 'Anggota', href: '/admin/members', icon: Users },
+  { label: 'Data Siswa', href: '/admin/members', icon: Users },
   { label: 'Denda & Sanksi', href: '/admin/fines', icon: AlertCircle },
   { label: 'Perpanjangan', href: '/admin/extensions', icon: Clock },
   { label: 'Pengaduan', href: '/admin/complaints', icon: FileWarning },
@@ -49,13 +49,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Logo */}
         <div className="p-5 border-b border-slate-800">
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center">
-              <BookOpen size={18} color="white" />
-            </div>
+            <img src="/sma-glitz-logo.jpg" alt="Logo SMA GLITZ" className="w-9 h-9 object-contain rounded-xl bg-white p-1 shadow" />
             <div>
-              <span className="text-lg font-black gradient-text">Bookify</span>
+              <span className="text-lg font-black gradient-text">SMA GLITZ</span>
               <div className="text-xs text-amber-400 flex items-center gap-1 -mt-0.5">
-                <Shield size={10} /> Admin Panel
+                <Shield size={10} /> Perpustakaan Admin
               </div>
             </div>
           </Link>

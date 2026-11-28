@@ -7,7 +7,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 date_default_timezone_set('Asia/Jakarta');
 
-const APP_NAME = 'Bookify';
+const APP_NAME = 'SMA GLITZ';
 const DB_FILE = __DIR__ . '/../storage/bookify.sqlite';
 
 function base_url(string $path = ''): string
@@ -143,8 +143,9 @@ SQL);
     $userColumns = array_column($db->query('PRAGMA table_info(users)')->fetchAll(), 'name');
     if (!in_array('photo_path', $userColumns, true)) { $db->exec('ALTER TABLE users ADD COLUMN photo_path TEXT'); }
     if (!in_array('nik', $userColumns, true)) { $db->exec('ALTER TABLE users ADD COLUMN nik TEXT'); }
-    $db->exec("UPDATE users SET address=address||', Semarang' WHERE email IN ('andi@email.com','sari@email.com','budi@email.com','lina@email.com','reza@email.com') AND address IS NOT NULL AND address NOT LIKE '%Semarang%'");
-    $db->exec("UPDATE users SET address='Perpustakaan Bookify, Semarang' WHERE member_id='ADMIN001' AND address='Perpustakaan Bookify'");
+    if (!in_array('nis', $userColumns, true)) { $db->exec('ALTER TABLE users ADD COLUMN nis TEXT'); }
+    if (!in_array('kelas', $userColumns, true)) { $db->exec('ALTER TABLE users ADD COLUMN kelas TEXT'); }
+    $db->exec("UPDATE users SET address='Perpustakaan SMA GLITZ, Jl. Glitz No. 1, Semarang' WHERE member_id='ADMIN001'");
     $db->exec("UPDATE publishers SET location='Semarang' WHERE name IN ('Gramedia Pustaka Utama','Erlangga','Mizan','Kompas') AND location IN ('Jakarta','Bandung')");
     $bookColumns = array_column($db->query('PRAGMA table_info(books)')->fetchAll(), 'name');
     if (!in_array('synopsis', $bookColumns, true)) { $db->exec('ALTER TABLE books ADD COLUMN synopsis TEXT'); }
@@ -189,35 +190,105 @@ SQL);
         $db->exec("UPDATE borrowings SET history_visible=0 WHERE id=(SELECT br.id FROM borrowings br JOIN users u ON u.id=br.user_id JOIN books b ON b.id=br.book_id WHERE u.member_id='MBR001' AND b.book_id='BK004' AND br.status='active' AND br.fulfillment_method='pickup' ORDER BY br.id DESC LIMIT 1)");
         $db->prepare('INSERT OR IGNORE INTO app_migrations(name) VALUES(?)')->execute(['hide_mbr001_bk004_history_v1']);
     }
+
+    $glitzMigration = $db->prepare('SELECT 1 FROM app_migrations WHERE name=?');
+    $glitzMigration->execute(['sma_glitz_dummy_data_v2']);
+    if (!$glitzMigration->fetchColumn()) {
+        $db->exec("UPDATE users SET name='Petugas Perpustakaan SMA GLITZ', email='admin@smaglitz.sch.id', address='Perpustakaan SMA GLITZ, Jl. Glitz No. 1, Semarang' WHERE member_id='ADMIN001'");
+
+        $students = [
+            ['MBR001', '20241001', 'Jolanda Aurelia Susanto', 'XII MIPA 1', 'jolanda@smaglitz.sch.id', '081122334455', 'female', 'Jl. Merdeka No. 15, Semarang', '3374012345670001'],
+            ['MBR002', '20241002', 'Theodora Trixie Sundari', 'XII IPS 1', 'theodora@smaglitz.sch.id', '082233445566', 'female', 'Jl. Pahlawan No. 28, Semarang', '3374012345670002'],
+            ['MBR003', '20241003', 'Alexandrina Immanuela Sahar', 'XII IPS 2', 'alexandrina@smaglitz.sch.id', '083344556677', 'female', 'Jl. Pemuda No. 102, Semarang', '3374012345670003'],
+            ['MBR004', '20241004', 'Bonifasius Frith Farandy', 'XI MIPA 2', 'bonifasius@smaglitz.sch.id', '084455667788', 'male', 'Jl. Diponegoro No. 44, Semarang', '3374012345670004'],
+            ['MBR005', '20241005', 'Thomas Nova Wibisono', 'XI IPS 1', 'thomas@smaglitz.sch.id', '085566778899', 'male', 'Jl. Sudirman No. 89, Semarang', '3374012345670005'],
+            ['MBR006', '20251006', 'Aditiya Pratama', 'X-A', 'aditiya@smaglitz.sch.id', '081234567801', 'male', 'Jl. Gajah Mada No. 17, Semarang', '3374012345670006'],
+            ['MBR007', '20251007', 'Clarissa Putri Anindya', 'X-B', 'clarissa@smaglitz.sch.id', '081234567802', 'female', 'Jl. Pandanaran No. 56, Semarang', '3374012345670007'],
+            ['MBR008', '20241008', 'Dimas Arya Wicaksana', 'XI MIPA 3', 'dimas@smaglitz.sch.id', '081234567803', 'male', 'Jl. Erlangga Tengah No. 9, Semarang', '3374012345670008'],
+            ['MBR009', '20231009', 'Felicia Evelyn Hartanto', 'XII MIPA 2', 'felicia@smaglitz.sch.id', '081234567804', 'female', 'Jl. Sumbing No. 14, Semarang', '3374012345670009'],
+            ['MBR010', '20251010', 'Kevin Jonathan Kusumo', 'X-C', 'kevin@smaglitz.sch.id', '081234567805', 'male', 'Jl. Siranda No. 3, Semarang', '3374012345670010'],
+        ];
+
+        $passHash = password_hash('member123', PASSWORD_DEFAULT);
+        $checkStmt = $db->prepare('SELECT id FROM users WHERE member_id=?');
+        $updateStmt = $db->prepare('UPDATE users SET nis=?, name=?, kelas=?, email=?, phone=?, gender=?, address=?, nik=?, role="member", status="active" WHERE member_id=?');
+        $insertStmt = $db->prepare('INSERT INTO users (member_id, nis, name, kelas, email, phone, gender, address, nik, password, role, status) VALUES (?,?,?,?,?,?,?,?,?,?,"member","active")');
+
+        foreach ($students as [$memberId, $nis, $name, $kelas, $email, $phone, $gender, $address, $nik]) {
+            $checkStmt->execute([$memberId]);
+            if ($checkStmt->fetchColumn()) {
+                $updateStmt->execute([$nis, $name, $kelas, $email, $phone, $gender, $address, $nik, $memberId]);
+            } else {
+                $insertStmt->execute([$memberId, $nis, $name, $kelas, $email, $phone, $gender, $address, $nik, $passHash]);
+            }
+        }
+        $db->prepare('INSERT OR IGNORE INTO app_migrations(name) VALUES(?)')->execute(['sma_glitz_dummy_data_v2']);
+    }
+
+    $coversMigration = $db->prepare('SELECT 1 FROM app_migrations WHERE name=?');
+    $coversMigration->execute(['sma_glitz_book_covers_v1']);
+    if (!$coversMigration->fetchColumn()) {
+        $coverMap = [
+            'BK001' => 'assets/covers/BK001.jpg',
+            'BK002' => 'assets/covers/BK002.jpg',
+            'BK003' => 'assets/covers/BK003.jpg',
+            'BK004' => 'assets/covers/BK004.jpg',
+            'BK005' => 'assets/covers/BK005.jpg',
+            'BK006' => 'assets/covers/BK006.jpg',
+            'BK007' => 'assets/covers/BK007.jpg',
+            'BK008' => 'assets/covers/BK008.jpg',
+            'BK009' => 'assets/covers/BK009.jpg',
+            'BK010' => 'assets/covers/BK010.jpg',
+            'BK011' => 'assets/covers/BK011.jpg',
+            'BK012' => 'assets/covers/BK012.jpg',
+        ];
+        $updateCover = $db->prepare('UPDATE books SET cover_url=? WHERE book_id=?');
+        foreach ($coverMap as $bookId => $coverUrl) {
+            $updateCover->execute([$coverUrl, $bookId]);
+        }
+        $db->prepare('INSERT OR IGNORE INTO app_migrations(name) VALUES(?)')->execute(['sma_glitz_book_covers_v1']);
+    }
 }
 
 function seed_database(PDO $db): void
 {
     $db->beginTransaction();
     try {
-        $insertUser = $db->prepare('INSERT INTO users (member_id,name,email,phone,gender,address,password,role,status) VALUES (?,?,?,?,?,?,?,?,?)');
-        $insertUser->execute(['ADMIN001', 'Administrator', 'admin@bookify.id', '081234567890', 'male', 'Perpustakaan Bookify, Semarang', password_hash('admin123', PASSWORD_DEFAULT), 'admin', 'active']);
+        $insertUser = $db->prepare('INSERT INTO users (member_id,nis,name,kelas,email,phone,gender,address,password,role,status,nik) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)');
+        $insertUser->execute(['ADMIN001', null, 'Petugas Perpustakaan SMA GLITZ', null, 'admin@smaglitz.sch.id', '081234567890', 'male', 'Perpustakaan SMA GLITZ, Jl. Glitz No. 1, Semarang', password_hash('admin123', PASSWORD_DEFAULT), 'admin', 'active', '3374010101800001']);
+        $passHash = password_hash('member123', PASSWORD_DEFAULT);
         foreach ([
-            ['MBR001', 'Jolanda Aurelia Susanto', 'andi@email.com', '081111111111', 'female', 'Jl. Merdeka No. 1, Semarang'],
-            ['MBR002', 'Theodora Trixie Sundari', 'sari@email.com', '082222222222', 'female', 'Jl. Pahlawan No. 5, Semarang'],
-            ['MBR003', 'Alexandrina Immanuela Sahar', 'budi@email.com', '083333333333', 'female', 'Jl. Pemuda No. 10, Semarang'],
-            ['MBR004', 'Bonifasius Frith Farandy', 'lina@email.com', '084444444444', 'male', 'Jl. Diponegoro No. 20, Semarang'],
-            ['MBR005', 'Thomas Nova Wibisono', 'reza@email.com', '085555555555', 'male', 'Jl. Sudirman No. 15, Semarang'],
-        ] as $member) {
-            $insertUser->execute([...$member, password_hash('member123', PASSWORD_DEFAULT), 'member', 'active']);
+            ['MBR001', '20241001', 'Jolanda Aurelia Susanto', 'XII MIPA 1', 'jolanda@smaglitz.sch.id', '081122334455', 'female', 'Jl. Merdeka No. 15, Semarang', '3374012345670001'],
+            ['MBR002', '20241002', 'Theodora Trixie Sundari', 'XII IPS 1', 'theodora@smaglitz.sch.id', '082233445566', 'female', 'Jl. Pahlawan No. 28, Semarang', '3374012345670002'],
+            ['MBR003', '20241003', 'Alexandrina Immanuela Sahar', 'XII IPS 2', 'alexandrina@smaglitz.sch.id', '083344556677', 'female', 'Jl. Pemuda No. 102, Semarang', '3374012345670003'],
+            ['MBR004', '20241004', 'Bonifasius Frith Farandy', 'XI MIPA 2', 'bonifasius@smaglitz.sch.id', '084455667788', 'male', 'Jl. Diponegoro No. 44, Semarang', '3374012345670004'],
+            ['MBR005', '20241005', 'Thomas Nova Wibisono', 'XI IPS 1', 'thomas@smaglitz.sch.id', '085566778899', 'male', 'Jl. Sudirman No. 89, Semarang', '3374012345670005'],
+            ['MBR006', '20251006', 'Aditiya Pratama', 'X-A', 'aditiya@smaglitz.sch.id', '081234567801', 'male', 'Jl. Gajah Mada No. 17, Semarang', '3374012345670006'],
+            ['MBR007', '20251007', 'Clarissa Putri Anindya', 'X-B', 'clarissa@smaglitz.sch.id', '081234567802', 'female', 'Jl. Pandanaran No. 56, Semarang', '3374012345670007'],
+            ['MBR008', '20241008', 'Dimas Arya Wicaksana', 'XI MIPA 3', 'dimas@smaglitz.sch.id', '081234567803', 'male', 'Jl. Erlangga Tengah No. 9, Semarang', '3374012345670008'],
+            ['MBR009', '20231009', 'Felicia Evelyn Hartanto', 'XII MIPA 2', 'felicia@smaglitz.sch.id', '081234567804', 'female', 'Jl. Sumbing No. 14, Semarang', '3374012345670009'],
+            ['MBR010', '20251010', 'Kevin Jonathan Kusumo', 'X-C', 'kevin@smaglitz.sch.id', '081234567805', 'male', 'Jl. Siranda No. 3, Semarang', '3374012345670010'],
+        ] as [$mId, $nis, $name, $kelas, $email, $phone, $gender, $addr, $nik]) {
+            $insertUser->execute([$mId, $nis, $name, $kelas, $email, $phone, $gender, $addr, $passHash, 'member', 'active', $nik]);
         }
         $insertPublisher = $db->prepare('INSERT INTO publishers (name,location) VALUES (?,?)');
         foreach ([['Gramedia Pustaka Utama','Semarang'], ['Erlangga','Semarang'], ['Mizan','Semarang'], ['Kompas','Semarang']] as $publisher) {
             $insertPublisher->execute($publisher);
         }
-        $insertBook = $db->prepare('INSERT INTO books (book_id,title,author,year,pages,genre,stock,available,publisher_id) VALUES (?,?,?,?,?,?,?,?,?)');
+        $insertBook = $db->prepare('INSERT INTO books (book_id,title,author,year,pages,genre,stock,available,publisher_id,cover_url) VALUES (?,?,?,?,?,?,?,?,?,?)');
         $books = [
-            ['BK001','Laskar Pelangi','Andrea Hirata',2005,529,'Novel',3,2,3], ['BK002','Bumi Manusia','Pramoedya Ananta Toer',1980,535,'Novel',2,2,1],
-            ['BK003','Pemrograman Web dengan Next.js','Ahmad Fauzi',2023,420,'Teknologi',4,3,2], ['BK004','Dasar-dasar Sistem Informasi','Budi Sutedjo',2022,310,'Teknologi',5,5,2],
-            ['BK005','Filosofi Teras','Henry Manampiring',2019,316,'Filsafat',3,1,1], ['BK006','Atomic Habits','James Clear',2018,319,'Pengembangan Diri',4,4,1],
-            ['BK007','Sapiens: Riwayat Singkat Umat Manusia','Yuval Noah Harari',2011,512,'Sejarah',2,2,1], ['BK008','The Alchemist','Paulo Coelho',1988,197,'Novel',3,3,3],
-            ['BK009','Pengantar Basis Data','Raghu Ramakrishnan',2020,440,'Teknologi',3,2,2], ['BK010','Rich Dad Poor Dad','Robert T. Kiyosaki',1997,207,'Keuangan',2,2,4],
-            ['BK011','Negeri 5 Menara','Ahmad Fuadi',2009,423,'Novel',2,2,1], ['BK012','Desain UI/UX Modern','Siti Rahma',2024,280,'Teknologi',3,3,2],
+            ['BK001','Laskar Pelangi','Andrea Hirata',2005,529,'Novel',3,2,3,'assets/covers/BK001.jpg'],
+            ['BK002','Bumi Manusia','Pramoedya Ananta Toer',1980,535,'Novel',2,2,1,'assets/covers/BK002.jpg'],
+            ['BK003','Pemrograman Web dengan Next.js','Ahmad Fauzi',2023,420,'Teknologi',4,3,2,'assets/covers/BK003.jpg'],
+            ['BK004','Dasar-dasar Sistem Informasi','Budi Sutedjo',2022,310,'Teknologi',5,5,2,'assets/covers/BK004.jpg'],
+            ['BK005','Filosofi Teras','Henry Manampiring',2019,316,'Filsafat',3,1,1,'assets/covers/BK005.jpg'],
+            ['BK006','Atomic Habits','James Clear',2018,319,'Pengembangan Diri',4,4,1,'assets/covers/BK006.jpg'],
+            ['BK007','Sapiens: Riwayat Singkat Umat Manusia','Yuval Noah Harari',2011,512,'Sejarah',2,2,1,'assets/covers/BK007.jpg'],
+            ['BK008','The Alchemist','Paulo Coelho',1988,197,'Novel',3,3,3,'assets/covers/BK008.jpg'],
+            ['BK009','Pengantar Basis Data','Raghu Ramakrishnan',2020,440,'Teknologi',3,2,2,'assets/covers/BK009.jpg'],
+            ['BK010','Rich Dad Poor Dad','Robert T. Kiyosaki',1997,207,'Keuangan',2,2,4,'assets/covers/BK010.jpg'],
+            ['BK011','Negeri 5 Menara','Ahmad Fuadi',2009,423,'Novel',2,2,1,'assets/covers/BK011.jpg'],
+            ['BK012','Desain UI/UX Modern','Siti Rahma',2024,280,'Teknologi',3,3,2,'assets/covers/BK012.jpg'],
         ];
         foreach ($books as $book) { $insertBook->execute($book); }
         $db->exec("INSERT INTO borrowings (user_id,book_id,borrowed_at,due_date,status) VALUES (2,1,datetime('now','-10 days'),datetime('now','-3 days'),'overdue')");
@@ -261,8 +332,8 @@ function require_admin(): array
 
 function login(string $memberId, string $password, ?string $role = null): bool
 {
-    $query = 'SELECT * FROM users WHERE member_id = ?';
-    $params = [$memberId];
+    $query = 'SELECT * FROM users WHERE (member_id = ? OR nis = ?)';
+    $params = [$memberId, $memberId];
     if ($role !== null) { $query .= ' AND role = ?'; $params[] = $role; }
     $statement = pdo()->prepare($query);
     $statement->execute($params);
